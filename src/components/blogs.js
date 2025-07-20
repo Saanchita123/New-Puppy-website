@@ -22,7 +22,7 @@ export default function CommunityStoriesSection() {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/all-stories");
+        const res = await axios.get("https://new-puppy-website.onrender.com/all-stories");
         setStories(res.data.reverse()); // newest first
       } catch (err) {
         console.error("Failed to fetch stories:", err);
