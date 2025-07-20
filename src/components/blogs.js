@@ -1,7 +1,7 @@
+import axios from "axios";
 import { Calendar, ThumbsUp } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function CommunityStoriesSection() {
   const navigate = useNavigate();
@@ -24,6 +24,7 @@ export default function CommunityStoriesSection() {
       try {
         const res = await axios.get("https://new-puppy-website.onrender.com/all-stories");
         setStories(res.data.reverse()); // newest first
+        console.log("📦 Stories received:", res.data);
       } catch (err) {
         console.error("Failed to fetch stories:", err);
       } finally {
@@ -52,7 +53,7 @@ export default function CommunityStoriesSection() {
         ) : (
           <>
             <div className="grid gap-8">
-              {stories.slice(0, 3).map((story) => (
+              {stories.map((story) => (
                 <div
                   key={story._id}
                   className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-purple-500"
@@ -62,12 +63,18 @@ export default function CommunityStoriesSection() {
                       {getInitials(story.name)}
                     </div>
                     <div className="flex-1">
-                      <h3 className="text-xl font-bold text-gray-800">A Shared Story</h3>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        {story.story?.split("\n")[0].slice(0, 60) || "A Shared Story"}...
+                      </h3>
                       <div className="flex items-center text-gray-600 text-sm">
-                        <span>By {story.name}</span>
+                        <span>By {story.name || "Anonymous"}</span>
                         <span className="mx-2">•</span>
                         <Calendar className="w-4 h-4 mr-1" />
-                        <span>{new Date(story.date).toLocaleDateString()}</span>
+                        <span>
+                          {story.date
+                            ? new Date(story.date).toLocaleDateString()
+                            : "Unknown date"}
+                        </span>
                       </div>
                     </div>
                     <button
@@ -78,12 +85,12 @@ export default function CommunityStoriesSection() {
                       <span className="font-semibold">{story.likes || 0}</span>
                     </button>
                   </div>
-                  <p className="text-gray-700 leading-relaxed">{story.story}</p>
+                  <p className="text-gray-700 leading-relaxed whitespace-pre-line">{story.story}</p>
                 </div>
               ))}
             </div>
 
-            {stories.length >= 3 && (
+            {stories.length > 0 && (
               <div className="text-center mt-10">
                 <button
                   onClick={() => navigate("/all-stories")}
