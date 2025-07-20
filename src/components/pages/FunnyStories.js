@@ -12,7 +12,7 @@ const AllStoriesPage = () => {
   useEffect(() => {
     const fetchStories = async () => {
       try {
-        const res = await axios.get("http://localhost:5000/all-stories");
+        const res = await axios.get("https://new-puppy-website.onrender.com/all-stories");
         setStories(res.data);
       } catch (err) {
         console.error("Error fetching all stories:", err);

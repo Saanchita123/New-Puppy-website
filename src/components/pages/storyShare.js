@@ -17,7 +17,7 @@ const StoryShare = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("http://localhost:5000/submit", form); // Your API endpoint
+      await axios.post("https://new-puppy-website.onrender.com/submit", form); // Your API endpoint
       alert("Story submitted!");
       setForm({ name: "", email: "", story: "", date: "" });
     } catch (error) {
