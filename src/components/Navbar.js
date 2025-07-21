@@ -1,14 +1,22 @@
-// Navbar.jsx
-import React, { useState } from 'react';
-import { Menu, X } from 'lucide-react';
+import React, { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Navbar = ({ scrollToSection }) => {
   const [menuOpen, setMenuOpen] = useState(false);
 
   const handleNavClick = (sectionId) => {
     scrollToSection(sectionId);
-    setMenuOpen(false); // Close menu on selection
+    setMenuOpen(false);
   };
+
+  // Include 'diseases' and 'contact' for routing
+  const sections = ['home', 'why-adopt', 'share-story', 'stories', 'diseases', 'contact','DailyUpdates'];
+
+  const renderLabel = (text) =>
+    text
+      .replace("-", " ")
+      .replace(/\b\w/g, (l) => l.toUpperCase());
 
   return (
     <nav className="fixed top-0 w-full z-50 bg-white/95 backdrop-blur-md shadow-lg">
@@ -24,18 +32,44 @@ const Navbar = ({ scrollToSection }) => {
 
           {/* Desktop Nav */}
           <div className="hidden md:flex space-x-8">
-            {['home', 'why-adopt', 'share-story', 'stories'].map((section) => (
-              <button
-                key={section}
-                onClick={() => handleNavClick(section)}
-                className="text-gray-700 hover:text-pink-500 font-medium transition-colors"
-              >
-                {section.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-              </button>
-            ))}
+            {sections.map((section) =>
+              section === "contact" ? (
+                <Link
+                  to="/pet-centers"
+                  key={section}
+                  className="text-gray-700 hover:text-pink-500 font-medium transition-colors"
+                >
+                  {renderLabel(section)}
+                </Link>
+              ) : section === "diseases" ? (
+                <Link
+                  to="/search-diseases"
+                  key={section}
+                  className="text-gray-700 hover:text-pink-500 font-medium transition-colors"
+                >
+                  {renderLabel(section)}
+                </Link>
+              ) : section === "DailyUpdates" ? (
+                <Link
+                  to="/animal-news"
+                  key={section}
+                  className="text-gray-700 hover:text-pink-500 font-medium transition-colors"
+                >
+                  {renderLabel(section)}
+                </Link>
+              ) : (
+                <button
+                  key={section}
+                  onClick={() => handleNavClick(section)}
+                  className="text-gray-700 hover:text-pink-500 font-medium transition-colors"
+                >
+                  {renderLabel(section)}
+                </button>
+              )
+            )}
           </div>
 
-          {/* Mobile Menu Button */}
+          {/* Mobile Menu Toggle */}
           <div className="md:hidden">
             <button
               onClick={() => setMenuOpen(!menuOpen)}
@@ -49,15 +83,45 @@ const Navbar = ({ scrollToSection }) => {
         {/* Mobile Menu */}
         {menuOpen && (
           <div className="md:hidden bg-white rounded-xl shadow-md px-4 py-4 space-y-4">
-            {['home', 'why-adopt', 'share-story', 'stories'].map((section) => (
-              <button
+            {sections.map((section) =>
+              section === "contact" ? (
+                <Link
+                  to="/pet-centers"
+                  key={section}
+                  onClick={() => setMenuOpen(false)}
+                  className="block w-full text-left text-gray-700 hover:text-pink-500 font-medium"
+                >
+                  {renderLabel(section)}
+                </Link>
+              ) : section === "diseases" ? (
+                <Link
+                  to="/search-diseases"
+                  key={section}
+                  onClick={() => setMenuOpen(false)}
+                  className="block w-full text-left text-gray-700 hover:text-pink-500 font-medium"
+                >
+                  {renderLabel(section)}
+                </Link>
+              ) : section==="DailyUpdates"? (
+                <Link
+                to=""
                 key={section}
-                onClick={() => handleNavClick(section)}
-                className="block w-full text-left text-gray-700 hover:text-pink-500 font-medium"
-              >
-                {section.replace('-', ' ').replace(/\b\w/g, (l) => l.toUpperCase())}
-              </button>
-            ))}
+                onClick={() => setMenuOpen(false)}
+                 className="block w-full text-left text-gray-700 hover:text-pink-500 font-medium"
+                 >
+                   {renderLabel(section)}
+                 </Link>
+              ):
+                (
+                <button
+                  key={section}
+                  onClick={() => handleNavClick(section)}
+                  className="block w-full text-left text-gray-700 hover:text-pink-500 font-medium"
+                >
+                  {renderLabel(section)}
+                </button>
+              )
+            )}
           </div>
         )}
       </div>
